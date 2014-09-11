@@ -1,5 +1,5 @@
 FROM ubuntu:14.04
-MAINTAINER Doro Wu <fcwu.tw@gmail.com>
+MAINTAINER Philipz <philipzheng@gmail.com>
 
 ENV DEBIAN_FRONTEND noninteractive
 ENV HOME /root
@@ -12,29 +12,29 @@ deb http://tw.archive.ubuntu.com/ubuntu/ trusty restricted\n\
 deb http://ppa.launchpad.net/chris-lea/node.js/ubuntu trusty main\n\
 "> /etc/apt/sources.list
 
-# no Upstart or DBus
-# https://github.com/dotcloud/docker/issues/1724#issuecomment-26294856
-RUN apt-mark hold initscripts udev plymouth mountall
-RUN dpkg-divert --local --rename --add /sbin/initctl && ln -sf /bin/true /sbin/initctl
-
 RUN apt-get update \
     && apt-get install -y --force-yes --no-install-recommends supervisor \
-        openssh-server pwgen sudo vim-tiny \
+        sudo vim-tiny \
         net-tools \
         lxde x11vnc xvfb \
         gtk2-engines-murrine ttf-ubuntu-font-family \
-        nodejs \
-        libreoffice firefox \
+        nodejs firefox
+
+RUN apt-get install -y xrdp \ 
     && apt-get autoclean \
     && apt-get autoremove \
     && rm -rf /var/lib/apt/lists/*
 
 ADD noVNC /noVNC/
 
-ADD startup.sh /
-ADD supervisord.conf /
 EXPOSE 6080
 EXPOSE 5900
-EXPOSE 22
-WORKDIR /
-ENTRYPOINT ["/startup.sh"]
+EXPOSE 3389
+
+COPY supervisord.conf /etc/supervisor/conf.d/supervisord.conf
+RUN useradd --create-home --shell /bin/bash --user-group --groups adm,sudo ubuntu
+RUN echo "ubuntu:PASSWD" | chpasswd
+
+# Define working directory.
+VOLUME ["/home/ubuntu"]
+CMD ["/usr/bin/supervisord","-n"]
