@@ -29,7 +29,10 @@ COPY startup.sh /
 RUN useradd --create-home --shell /bin/bash --user-group --groups adm,sudo ubuntu
 RUN echo "ubuntu:PASSWD" | chpasswd
 
+#sed s/port=-1/port=5901/g /etc/xrdp/xrdp.ini 
+
 # Define working directory.
 VOLUME ["/home/ubuntu"]
-CMD ["/usr/bin/supervisord","-n"]
-ENTRYPOINT["/startup.sh"]
+
+WORKDIR /
+ENTRYPOINT ["/startup.sh"]
