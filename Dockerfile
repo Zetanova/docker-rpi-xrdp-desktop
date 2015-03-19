@@ -24,10 +24,12 @@ EXPOSE 6080
 EXPOSE 5900
 EXPOSE 3389
 
-COPY supervisord.conf /etc/supervisor/conf.d/supervisord.conf
+COPY supervisord.conf /
+COPY startup.sh /
 RUN useradd --create-home --shell /bin/bash --user-group --groups adm,sudo ubuntu
 RUN echo "ubuntu:PASSWD" | chpasswd
 
 # Define working directory.
 VOLUME ["/home/ubuntu"]
 CMD ["/usr/bin/supervisord","-n"]
+ENTRYPOINT["/startup.sh"]
