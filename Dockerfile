@@ -18,8 +18,6 @@ RUN apt-get install -y xrdp \
     && apt-get autoremove \
     && rm -rf /var/lib/apt/lists/*
 
-ADD noVNC /noVNC/
-
 EXPOSE 6080
 EXPOSE 5900
 EXPOSE 3389
@@ -29,10 +27,8 @@ COPY startup.sh /
 RUN useradd --create-home --shell /bin/bash --user-group --groups adm,sudo ubuntu
 RUN echo "ubuntu:PASSWD" | chpasswd
 
-#sed s/port=-1/port=5901/g /etc/xrdp/xrdp.ini 
-
 # Define working directory.
-VOLUME ["/home/ubuntu"]
+# VOLUME ["/home/ubuntu"]
 
 WORKDIR /
 ENTRYPOINT ["/startup.sh"]
