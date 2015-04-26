@@ -14,7 +14,7 @@ RUN apt-get update \
 
 RUN apt-get install -y xrdp \ 
     && apt-get autoclean \
-    && apt-get autoremove \
+    && apt-get autoremove
 #   && rm -rf /var/lib/apt/lists/*
 
 EXPOSE 6080
