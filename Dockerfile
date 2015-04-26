@@ -10,8 +10,7 @@ RUN apt-get update \
         sudo nano \
         net-tools \
         lxde x11vnc xvfb \
-        gtk2-engines-murrine \
-        firefox
+        gtk2-engines-murrine
 
 RUN apt-get install -y xrdp \ 
     && apt-get autoclean \
