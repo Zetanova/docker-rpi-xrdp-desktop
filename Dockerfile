@@ -1,8 +1,8 @@
-FROM ubuntu:14.04
-MAINTAINER Sidirius <sid@sh87.net>
+FROM resin/rpi-raspbian:wheezy
+MAINTAINER Lucas Käldström <lucas.kaldstrom@hotmail.co.uk>
 
-ENV DEBIAN_FRONTEND noninteractive
-ENV HOME /root
+# ENV DEBIAN_FRONTEND noninteractive
+# ENV HOME /root
 
 
 RUN apt-get update \
@@ -10,13 +10,13 @@ RUN apt-get update \
         sudo nano \
         net-tools \
         lxde x11vnc xvfb \
-        gtk2-engines-murrine ttf-ubuntu-font-family \
-        nodejs firefox
+        gtk2-engines-murrine \
+        firefox
 
 RUN apt-get install -y xrdp \ 
     && apt-get autoclean \
     && apt-get autoremove \
-    && rm -rf /var/lib/apt/lists/*
+#   && rm -rf /var/lib/apt/lists/*
 
 EXPOSE 6080
 EXPOSE 5900
@@ -24,8 +24,8 @@ EXPOSE 3389
 
 COPY supervisord.conf /
 COPY startup.sh /
-RUN useradd --create-home --shell /bin/bash --user-group --groups adm,sudo ubuntu
-RUN echo "ubuntu:PASSWD" | chpasswd
+RUN useradd --create-home --shell /bin/bash --user-group --groups adm,sudo pi
+RUN echo "pi:raspberry" | chpasswd
 
 # Define working directory.
 # VOLUME ["/home/ubuntu"]
